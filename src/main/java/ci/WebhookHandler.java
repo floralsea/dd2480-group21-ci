@@ -32,15 +32,30 @@ public class WebhookHandler {
             // Parse JSON payload from GitHub webhook
             JSONObject json = new JSONObject(payload.toString());
 
+            // Print for debug
+            System.out.println("Raw Webhook Payload: " + payload.toString());
+
             // Extract repository URL and commit SHA from webhook data
-            String repoUrl = json.getJSONObject("repository").getString("clone_url");
+            // String repoUrl = json.getJSONObject("repository").getString("clone_url");
+            // String commitSHA = json.getJSONObject("head_commit").getString("id");
+
+            String repoOwner = json.getJSONObject("repository").getJSONObject("owner").getString("login");
+            String repoName = json.getJSONObject("repository").getString("name");
+
             String commitSHA = json.getJSONObject("head_commit").getString("id");
 
+            // Debugging output
+            System.out.println("Extracted Repo Owner: " + repoOwner);
+            System.out.println("Extracted Repo Name: " + repoName);
+            System.out.println("Commit SHA: " + commitSHA);
+
+            JobQueue.addJob(repoOwner, repoName, commitSHA);
+
             // Log received webhook data
-            System.out.println("Webhook received for repo: " + repoUrl);
+            // System.out.println("Webhook received for repo: " + repoUrl);
 
             // Add a new job to the queue for processing the CI pipeline
-            JobQueue.addJob(repoUrl, commitSHA);
+            // JobQueue.addJob(repoUrl, commitSHA);
 
         } catch (IOException e) {
             // Print error stack trace if reading the request fails
