@@ -1,4 +1,4 @@
-package ci;
+package com.group21.ci;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.Request;

@@ -1,4 +1,4 @@
-package ci;
+package com.group21.ci;
 
 import java.net.HttpURLConnection;
 import java.net.URL;

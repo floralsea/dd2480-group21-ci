@@ -1,4 +1,4 @@
-package ci;
+package com.group21.ci;
 
 import java.io.FileWriter;
 import java.io.IOException;
