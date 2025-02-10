@@ -1,9 +1,0 @@
-ci/BuildWorker.class
-ci/WebhookHandler.class
-ci/BuildManager.class
-ci/ContinuousIntegrationServer.class
-ci/TestRunner.class
-ci/JobQueue$BuildJob.class
-ci/JobQueue.class
-ci/StatusReporter.class
-ci/Logger.class
