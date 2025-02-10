@@ -73,7 +73,7 @@ echo $GITHUB_TOKEN
 Run:
 ```sh
 mvn clean install
-mvn exec:java -Dexec.mainClass="ci.ContinuousIntegrationServer"
+mvn exec:java -Dexec.mainClass="com.group21.ci.ContinuousIntegrationServer"
 ```
 The server will now listen on port 8080.
 
