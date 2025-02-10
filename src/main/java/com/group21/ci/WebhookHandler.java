@@ -1,4 +1,4 @@
-package ci;
+package com.group21.ci;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;

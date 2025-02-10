@@ -1,4 +1,4 @@
-package ci;
+package com.group21.ci;
 
 import java.io.BufferedReader;
 import java.io.FileWriter;
