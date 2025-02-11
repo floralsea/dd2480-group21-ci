@@ -25,10 +25,11 @@ public class BuildManager {
      *
      * @param repoOwner The owner of the repository.
      * @param repoName  The name of the repository.
+     * @param branchName    The branch to be tested of the repository.
      * @return true if tests pass successfully, false otherwise.
      */
     @SuppressWarnings("deprecation")
-    public static boolean runBuild(String repoOwner, String repoName) {
+    public static boolean runBuild(String repoOwner, String repoName, String branchName) {
         try {
             // Construct the repository URL dynamically
             String repoUrl = "https://github.com/" + repoOwner + "/" + repoName + ".git";
@@ -36,7 +37,7 @@ public class BuildManager {
             System.out.println("Cloning repository...");
 
             // Clone the repository into a local "repo" directory
-            Process clone = Runtime.getRuntime().exec("git clone " + repoUrl + " repo");
+            Process clone = Runtime.getRuntime().exec("git clone --branch " + branchName + " " + repoUrl + " repo");
             clone.waitFor(); // Wait for cloning to complete
 
             System.out.println("Running tests in the cloned repository...");
