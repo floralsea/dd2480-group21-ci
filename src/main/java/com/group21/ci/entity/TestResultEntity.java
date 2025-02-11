@@ -3,6 +3,13 @@ package com.group21.ci.entity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+/**
+ * This table stores:
+ * 	•	Commit SHA (to identify the code version).
+ * 	•	Test status (SUCCESS or FAILED).
+ * 	•	Test logs (console output of mvn test).
+ * 	•	Timestamp (when the test was run).
+ */
 @Entity
 @Table(name = "test_results")
 public class TestResultEntity {

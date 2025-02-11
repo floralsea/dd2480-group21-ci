@@ -7,6 +7,10 @@ import org.hibernate.Transaction;
 
 import java.util.List;
 
+
+/**
+ * Data Access Object for table TestResult
+ */
 public class TestResultDAO {
     private final SessionFactory sessionFactory;
 
@@ -17,6 +21,11 @@ public class TestResultDAO {
     public TestResultDAO(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
+
+    /**
+     * Insert a record into database
+     * @param testResult
+     */
     public void saveTestResult(TestResultEntity testResult) {
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
@@ -29,6 +38,12 @@ public class TestResultDAO {
         }
     }
 
+
+    /**
+     * Look up a record by its commitSHA
+     * @param commitSha
+     * @return a TestResultEntity
+     */
     public TestResultEntity getTestResultByCommitSha(String commitSha) {
         try (Session session = sessionFactory.openSession()) {
             return session.createQuery(
@@ -38,12 +53,21 @@ public class TestResultDAO {
         }
     }
 
+
+    /**
+     * Get all records
+     * @return a list of TestResultEntity
+     */
     public List<TestResultEntity> getAllTestResults() {
         try (Session session = sessionFactory.openSession()) {
             return session.createQuery("FROM TestResultEntity", TestResultEntity.class).list();
         }
     }
 
+    /**
+     * Delete a record by its CommitSHA
+     * @param commitSha
+     */
     public void deleteTestResult(String commitSha) {
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
