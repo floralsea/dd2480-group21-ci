@@ -43,13 +43,17 @@ public class WebhookHandler {
             String repoName = json.getJSONObject("repository").getString("name");
 
             String commitSHA = json.getJSONObject("head_commit").getString("id");
+            
+            String ref = json.getString("ref"); // For extracting branch name of commit
+            String branchName = ref.replace("refs/heads/", "");
 
             // Debugging output
             System.out.println("Extracted Repo Owner: " + repoOwner);
             System.out.println("Extracted Repo Name: " + repoName);
             System.out.println("Commit SHA: " + commitSHA);
+            System.out.println("Branch Name: " + branchName);
 
-            JobQueue.addJob(repoOwner, repoName, commitSHA);
+            JobQueue.addJob(repoOwner, repoName, commitSHA, branchName);
 
             // Log received webhook data
             // System.out.println("Webhook received for repo: " + repoUrl);
