@@ -3,6 +3,7 @@ package com.group21.ci.dao;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+
 /**
  * A Utility class providing Hibernate Instance for testing
  */

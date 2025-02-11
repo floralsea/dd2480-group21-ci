@@ -7,6 +7,7 @@ import org.hibernate.Transaction;
 
 import java.util.List;
 
+
 /**
  * Data Access Object for table TestResult
  */
@@ -37,6 +38,7 @@ public class TestResultDAO {
         }
     }
 
+
     /**
      * Look up a record by its commitSHA
      * @param commitSha
@@ -50,6 +52,7 @@ public class TestResultDAO {
                     .uniqueResult();
         }
     }
+
 
     /**
      * Get all records
