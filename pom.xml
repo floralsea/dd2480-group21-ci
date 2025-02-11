@@ -70,7 +70,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.0.0</version>
                 <configuration>
-                    <mainClass>ci.ContinuousIntegrationServer</mainClass>
+                    <mainClass>com.group21.ci.ContinuousIntegrationServer</mainClass>
                 </configuration>
             </plugin>
         </plugins>

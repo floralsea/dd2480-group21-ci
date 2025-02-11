@@ -1,7 +1,10 @@
 package com.group21.ci;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.InputStreamReader;
+import java.time.LocalDateTime;
 
 /**
  * BuildManager is responsible for cloning the repository and executing the test
@@ -11,6 +14,7 @@ import java.io.InputStreamReader;
  * - Returns true if tests pass, otherwise false.
  */
 public class BuildManager {
+    private static final String LOG_FILE = "test_results.log";
 
     /**
      * Executes the build process for a given repository.
@@ -29,40 +33,43 @@ public class BuildManager {
             // Construct the repository URL dynamically
             String repoUrl = "https://github.com/" + repoOwner + "/" + repoName + ".git";
 
+            System.out.println("Cloning repository...");
+
             // Clone the repository into a local "repo" directory
             Process clone = Runtime.getRuntime().exec("git clone " + repoUrl + " repo");
             clone.waitFor(); // Wait for cloning to complete
 
-            // Run Maven tests inside the cloned repository
-            Process mvnTest = Runtime.getRuntime().exec("cd repo && mvn test");
-            printProcessOutput(mvnTest); // Print the test output
+            System.out.println("Running tests in the cloned repository...");
 
-            // Return true if the test process exits with status 0 (success)
-            return mvnTest.waitFor() == 0;
+            ProcessBuilder mvnTestBuilder = new ProcessBuilder("mvn", "test");
+            mvnTestBuilder.directory(new File("repo"));
+            Process mvnTest = mvnTestBuilder.start();
+            
+            BufferedReader reader = new BufferedReader(new InputStreamReader(mvnTest.getInputStream()));
+            FileWriter logWriter = new FileWriter(LOG_FILE, true); // Append to the log file
+            String line;
+            boolean success = false;
+
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line); // Print test output to console
+                logWriter.write(LocalDateTime.now() + " - " + line + "\n"); // Write test output to log file
+
+                // Check if the test execution was successful
+                if (line.contains("BUILD SUCCESS")) {
+                    success = true;
+                }
+            }
+
+            mvnTest.waitFor(); // Wait for the test execution to complete
+            logWriter.close(); // Close the log file
+
+
+            // Return true if tests pass and build succeeds
+            return success && mvnTest.waitFor() == 0;
         } catch (Exception e) {
             // Print error details if build execution fails
             e.printStackTrace();
             return false;
         }
-    }
-
-    /**
-     * Reads and prints the output of a running process.
-     * This method helps capture logs from the build and test execution.
-     *
-     * @param process The process whose output needs to be printed.
-     * @throws Exception If an error occurs while reading the process output.
-     */
-    private static void printProcessOutput(Process process) throws Exception {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-        String line;
-
-        // Read and print each line of process output
-        while ((line = reader.readLine()) != null) {
-            System.out.println(line);
-        }
-
-        // Wait for process to complete before exiting
-        process.waitFor();
     }
 }
