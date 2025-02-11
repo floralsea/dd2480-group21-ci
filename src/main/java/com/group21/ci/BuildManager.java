@@ -72,24 +72,4 @@ public class BuildManager {
             return false;
         }
     }
-
-    /**
-     * Reads and prints the output of a running process.
-     * This method helps capture logs from the build and test execution.
-     *
-     * @param process The process whose output needs to be printed.
-     * @throws Exception If an error occurs while reading the process output.
-     */
-    private static void printProcessOutput(Process process) throws Exception {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-        String line;
-
-        // Read and print each line of process output
-        while ((line = reader.readLine()) != null) {
-            System.out.println(line);
-        }
-
-        // Wait for process to complete before exiting
-        process.waitFor();
-    }
 }

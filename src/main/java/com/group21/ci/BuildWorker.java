@@ -28,11 +28,8 @@ public class BuildWorker implements Runnable {
     public void run() {
         System.out.println("Processing job for commit: " + job.commitSHA);
 
-        // Run build process (clone repo and compile)
+        // Run build process and tests
         boolean buildSuccess = BuildManager.runBuild(job.repoOwner, job.repoName);
-
-        // Execute test suite
-        //boolean testSuccess = TestRunner.runTests();
 
         // Determine final status (pass only if both build & test succeed)
         boolean finalStatus = buildSuccess;
