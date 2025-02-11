@@ -104,7 +104,7 @@ Copy the https://xyz123.ngrok-free.app URL.
 1.	Push an empty commit to trigger the CI server:
 ```sh
 git commit --allow-empty -m "test: trigger webhook"
-git push origin main
+git push origin assessment
 ```
 🚨 Note: You should ignore "terget/" when commit, if you want to link your commit to an issue, please use issue (#15), which refers to testing the webhook.
 
