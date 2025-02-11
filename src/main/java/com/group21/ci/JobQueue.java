@@ -19,10 +19,11 @@ public class JobQueue {
      * 
      * @param repoUrl   The URL of the repository where the commit was pushed.
      * @param commitSHA The commit SHA for which the CI job is triggered.
+     * @param branchName The name of the branch which the commit belongs to.
      */
 
-    public static void addJob(String repoOwner, String repoName, String commitSHA) {
-        BuildJob job = new BuildJob(repoOwner, repoName, commitSHA);
+    public static void addJob(String repoOwner, String repoName, String commitSHA, String branchName) {
+        BuildJob job = new BuildJob(repoOwner, repoName, commitSHA, branchName);
         queue.add(job);
         new Thread(new BuildWorker(job)).start();
     }
@@ -31,11 +32,13 @@ public class JobQueue {
         String repoOwner;
         String repoName;
         String commitSHA;
+        String branchName;
 
-        public BuildJob(String repoOwner, String repoName, String commitSHA) {
+        public BuildJob(String repoOwner, String repoName, String commitSHA, String branchName) {
             this.repoOwner = repoOwner;
             this.repoName = repoName;
             this.commitSHA = commitSHA;
+            this.branchName = branchName;
         }
     }
 
