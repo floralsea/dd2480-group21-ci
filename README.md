@@ -152,6 +152,12 @@ curl -X PATCH -H "Authorization: token $GITHUB_TOKEN" \
 
 ### **🔹 Contribution Statements**
 - **Biming Wen**: 
+  - Contributed to the new feature for p+, keeping build history
+  - Define `TestResult`table of relational database MySQL, holding records for each 'mvn test'
+  - Implement Data Persistance Layer of the project, including
+    - classes TestResultEntity and TestStatus in package entity
+    - Classes TestResultDAO, HibernateUtil and HibernateTestUtil in package dao
+    - Unit tests and integral tests of TestResultDAO
   
 - **Xu Zuo**:
    - Set up the initial structure based on the architecture provided by Biming Wen.
