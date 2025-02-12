@@ -15,6 +15,12 @@ public class TestResultDAOTest {
 
     @BeforeAll
     static void setup() {
+        String dbType = System.getProperty("dbType", "h2"); // Default to H2
+        if ("mysql".equalsIgnoreCase(dbType)) {
+            HibernateTestUtil.init("hibernate-mysql-test.cfg.xml");
+        } else {
+            HibernateTestUtil.init("hibernate-test.cfg.xml");
+        }
         testResultDAO = new TestResultDAO(HibernateTestUtil.getSessionFactory());
     }
 
