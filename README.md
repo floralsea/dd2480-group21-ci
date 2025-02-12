@@ -154,6 +154,10 @@ curl -X PATCH -H "Authorization: token $GITHUB_TOKEN" \
 - **Biming Wen**: 
   
 - **Xu Zuo**:
+   - Set up the initial structure based on the architecture provided by Biming Wen.
+   - Implemented and contributed to CI sever, BuildManager, BuildWorker, JobQueue, StatusReporter and WebhookHandler.
+   - Implemented unit test of BuildManager.
+   - Contributed to the new feature for p+, keeping build history.
   
 - **Gustav Nordström**:
    - Implemented/contributed to the CI server being able to run tests
