@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -79,5 +80,22 @@ class BuildManagerTest {
         logWriter.close();
 
         return success; // Return success based on the test scenario
+    }
+
+    @Test
+    void testDeleteDirectory() throws IOException {
+        // setup a test directory and a file inside it
+        File testDirectory = new File(TEST_REPO_DIR);
+        File testFile = new File(testDirectory, "testFile.txt");
+        testFile.createNewFile();
+
+        assertTrue(testDirectory.exists(), "Test directory should exist before deletion.");
+        assertTrue(testFile.exists(), "Test file should exist before deletion.");
+
+        deleteDirectory(testDirectory);
+
+        // assert test file and directory deleted
+        assertFalse(testFile.exists(), "Test file should be deleted.");
+        assertFalse(testDirectory.exists(), "Test directory should be deleted.");
     }
 }
