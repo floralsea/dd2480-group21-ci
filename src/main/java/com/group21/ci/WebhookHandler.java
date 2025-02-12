@@ -3,6 +3,8 @@ package com.group21.ci;
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.IOException;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -34,16 +36,38 @@ public class WebhookHandler {
 
             // Print for debug
             System.out.println("Raw Webhook Payload: " + payload.toString());
-
-            // Extract repository URL and commit SHA from webhook data
-            // String repoUrl = json.getJSONObject("repository").getString("clone_url");
-            // String commitSHA = json.getJSONObject("head_commit").getString("id");
-
-            String repoOwner = json.getJSONObject("repository").getJSONObject("owner").getString("login");
-            String repoName = json.getJSONObject("repository").getString("name");
-
-            String commitSHA = json.getJSONObject("head_commit").getString("id");
             
+            // Validate required fields exist
+            if (!json.has("repository") || !json.has("head_commit") || !json.has("ref")) {
+                System.err.println("Invalid webhook payload: missing required fields.");
+                return;  // Exit early to prevent errors
+            }
+            
+            // Extract repository owner, name, commitSHA and branch name from webhook data,
+            // and validate required fields exist
+
+            JSONObject repository = json.getJSONObject("repository");
+            if (!repository.has("name") || !repository.has("owner")) {
+                System.err.println("Invalid repository data.");
+                return;
+            }
+
+            JSONObject owner = repository.getJSONObject("owner");
+            if (!owner.has("login")) {
+                System.err.println("Invalid repository owner data.");
+                return;
+            }
+
+            String repoOwner = owner.getString("login");
+            String repoName = repository.getString("name");
+
+            JSONObject headCommit = json.getJSONObject("head_commit");
+            if (!headCommit.has("id")) {
+                System.err.println("Invalid commit data.");
+                return;
+            }
+
+            String commitSHA = headCommit.getString("id");
             String ref = json.getString("ref"); // For extracting branch name of commit
             String branchName = ref.replace("refs/heads/", "");
 
@@ -63,6 +87,10 @@ public class WebhookHandler {
 
         } catch (IOException e) {
             // Print error stack trace if reading the request fails
+            System.err.println("Error reading request payload: " + e.getMessage());
+            e.printStackTrace();
+        } catch (JSONException e) {
+            System.err.println("Invalid JSON received: " + e.getMessage());
             e.printStackTrace();
         }
     }
