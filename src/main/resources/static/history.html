@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Build History</title>
+    <script>
+        async function fetchBuildHistory() {
+            try {
+                let response = await fetch("/history"); // Fetch from CI server
+                let data = await response.json();
+
+                let table = document.getElementById("history-table");
+                data.forEach(build => {
+                    let row = table.insertRow();
+                    row.insertCell(0).innerText = build.commitSha;
+                    row.insertCell(1).innerText = build.status;
+                    row.insertCell(2).innerText = build.timestamp;
+                });
+            } catch (error) {
+                console.error("Failed to load build history:", error);
+            }
+        }
+
+        window.onload = fetchBuildHistory;
+    </script>
+</head>
+<body>
+<h1>Build History</h1>
+<table border="1">
+    <tr>
+        <th>Commit SHA</th>
+        <th>Status</th>
+        <th>Timestamp</th>
+    </tr>
+    <tbody id="history-table"></tbody>
+</table>
+</body>
+</html>
