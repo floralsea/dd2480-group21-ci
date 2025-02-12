@@ -1,11 +1,15 @@
 package com.group21.ci.dao;
 
+
 import com.group21.ci.entity.TestResultEntity;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
+
 import java.util.List;
+
+
 
 
 /**
@@ -14,13 +18,16 @@ import java.util.List;
 public class TestResultDAO {
     private final SessionFactory sessionFactory;
 
+
     public TestResultDAO() {
         this.sessionFactory = HibernateUtil.getSessionFactory();
     }
 
+
     public TestResultDAO(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
+
 
     /**
      * Insert a record into database
@@ -39,6 +46,8 @@ public class TestResultDAO {
     }
 
 
+
+
     /**
      * Look up a record by its commitSHA
      * @param commitSha
@@ -47,11 +56,13 @@ public class TestResultDAO {
     public TestResultEntity getTestResultByCommitSha(String commitSha) {
         try (Session session = sessionFactory.openSession()) {
             return session.createQuery(
-                    "FROM TestResultEntity WHERE commitSha = :commitSha", TestResultEntity.class)
+                            "FROM TestResultEntity WHERE commitSha = :commitSha", TestResultEntity.class)
                     .setParameter("commitSha", commitSha)
                     .uniqueResult();
         }
     }
+
+
 
 
     /**
@@ -63,6 +74,7 @@ public class TestResultDAO {
             return session.createQuery("FROM TestResultEntity", TestResultEntity.class).list();
         }
     }
+
 
     /**
      * Delete a record by its CommitSHA
@@ -80,6 +92,25 @@ public class TestResultDAO {
         } catch (Exception e) {
             if (transaction != null) transaction.rollback();
             e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * Retrieves a build result by commit SHA.
+     * @param commitSha The commit identifier.
+     * @return The corresponding TestResultEntity or null if not found.
+     */
+    public TestResultEntity getResultByCommit(String commitSha) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.get(TestResultEntity.class, commitSha);
+        }
+    }
+
+
+    public TestResultEntity getTestResultById(int id) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.get(TestResultEntity.class, id);
         }
     }
 }
