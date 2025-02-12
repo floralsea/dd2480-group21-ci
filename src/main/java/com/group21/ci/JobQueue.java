@@ -17,7 +17,8 @@ public class JobQueue {
     /**
      * Adds a new CI job to the queue and starts a BuildWorker to process it.
      * 
-     * @param repoUrl   The URL of the repository where the commit was pushed.
+     * @param repoOwner The owner username of the repository where the commit was pushed.
+     * @param repoName The name of the repository where the commit was pushed.
      * @param commitSHA The commit SHA for which the CI job is triggered.
      * @param branchName The name of the branch which the commit belongs to.
      */
