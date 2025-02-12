@@ -20,10 +20,8 @@ This project is a simple **Continuous Integration (CI) server** that:
  | | | | |- WebhookHandler.java  # Parses webhook events
  | | | | |- JobQueue.java  # Manages queued build jobs
  | | | | |- BuildWorker.java  # Processes CI jobs asynchronously
- | | | | |- BuildManager.java  # Executes Git operations and builds
- | | | | |- TestRunner.java  # Runs tests and stores results
+ | | | | |- BuildManager.java  # Executes Git operations, builds and runs tests
  | | | | |- StatusReporter.java  # Sends commit status updates
- | | | | |- Logger.java  # Centralized logging & result storage
  |- test
  | |- BuildManagerTest.java  # Unit tests for BuildManager
  | |- WebhookHandlerTest.java  # Unit tests for WebhookHandler
