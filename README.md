@@ -179,6 +179,7 @@ curl -X PATCH -H "Authorization: token $GITHUB_TOKEN" \
       - and statusreporter
    - Contributed to some of the documentation and generated the browsable html documentation
 
+
 ## Essence State
 
 Regarding Essence, we believe we're currently in the collaborating stage, and while progress is being made, there are still areas for improvement. Overall, collaboration is functioning well, but to reach a higher level of success, communication and effectiveness need to be further improved.
