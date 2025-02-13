@@ -29,6 +29,7 @@ public class BuildManager {
      * - Clones the repository into a local directory.
      * - Runs `mvn test` to execute tests.
      * - Returns true if tests pass successfully, otherwise false.
+     * - Clears the cloned repository directory after execution.
      *
      * @param repoOwner The owner of the repository.
      * @param repoName  The name of the repository.
@@ -55,7 +56,8 @@ public class BuildManager {
 
             // Run Maven test
             ProcessBuilder mvnTestBuilder = new ProcessBuilder("mvn", "test");
-            mvnTestBuilder.directory(new File("repo"));
+            File repoDirectory = new File("repo");
+            mvnTestBuilder.directory(repoDirectory);
             Process mvnTest = mvnTestBuilder.start();
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(mvnTest.getInputStream()));
@@ -98,7 +100,8 @@ public class BuildManager {
             logWriter.close(); // Close the log file
 
 
-
+            // Clean up: Delete the cloned repository directory
+            deleteDirectory(repoDirectory);
 
             // Return true if tests pass and build succeeds
 //            return success && mvnTest.waitFor() == 0;
@@ -109,6 +112,27 @@ public class BuildManager {
             // Print error details if build execution fails
             e.printStackTrace();
             return false;
+        }
+    }
+
+    /**
+     * Helper method to deletes a directory its contents.
+     *
+     * @param directory The directory to be deleted.
+     */
+    private static void deleteDirectory(File directory) {
+        if (directory.exists()) {
+            File[] files = directory.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    if (file.isDirectory()) {
+                        deleteDirectory(file); 
+                    } else {
+                        file.delete();
+                    }
+                }
+            }
+            directory.delete(); 
         }
     }
 }
