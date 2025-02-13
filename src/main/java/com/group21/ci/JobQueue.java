@@ -17,25 +17,49 @@ public class JobQueue {
     /**
      * Adds a new CI job to the queue and starts a BuildWorker to process it.
      * 
-     * @param repoUrl   The URL of the repository where the commit was pushed.
+     * @param repoOwner The owner username of the repository where the commit was pushed.
+     * @param repoName The name of the repository where the commit was pushed.
      * @param commitSHA The commit SHA for which the CI job is triggered.
+     * @param branchName The name of the branch which the commit belongs to.
      */
 
-    public static void addJob(String repoOwner, String repoName, String commitSHA) {
-        BuildJob job = new BuildJob(repoOwner, repoName, commitSHA);
+     /**
+     * Adds a new CI job to the queue and starts a BuildWorker to process it.
+     * 
+     * @param repoOwner  The owner username of the repository where the commit was pushed.
+     * @param repoName   The name of the repository where the commit was pushed.
+     * @param commitSHA  The commit SHA for which the CI job is triggered.
+     * @param branchName The name of the branch to which the commit belongs.
+     */
+    public static void addJob(String repoOwner, String repoName, String commitSHA, String branchName) {
+        BuildJob job = new BuildJob(repoOwner, repoName, commitSHA, branchName);
         queue.add(job);
         new Thread(new BuildWorker(job)).start();
     }
 
+    /**
+     * Represents a build job containing repository and commit details.
+     * Each job corresponds to a commit that triggered CI/CD processing.
+     */
     public static class BuildJob {
         String repoOwner;
         String repoName;
         String commitSHA;
-
-        public BuildJob(String repoOwner, String repoName, String commitSHA) {
+        String branchName;
+        
+        /**
+         * Constructs a new BuildJob with the given repository details.
+         *
+         * @param repoOwner  The repository owner's username.
+         * @param repoName   The repository name.
+         * @param commitSHA  The SHA hash of the commit.
+         * @param branchName The branch where the commit is pushed.
+         */
+        public BuildJob(String repoOwner, String repoName, String commitSHA, String branchName) {
             this.repoOwner = repoOwner;
             this.repoName = repoName;
             this.commitSHA = commitSHA;
+            this.branchName = branchName;
         }
     }
 

@@ -20,10 +20,8 @@ This project is a simple **Continuous Integration (CI) server** that:
  | | | | |- WebhookHandler.java  # Parses webhook events
  | | | | |- JobQueue.java  # Manages queued build jobs
  | | | | |- BuildWorker.java  # Processes CI jobs asynchronously
- | | | | |- BuildManager.java  # Executes Git operations and builds
- | | | | |- TestRunner.java  # Runs tests and stores results
+ | | | | |- BuildManager.java  # Executes Git operations, builds and runs tests
  | | | | |- StatusReporter.java  # Sends commit status updates
- | | | | |- Logger.java  # Centralized logging & result storage
  |- test
  | |- BuildManagerTest.java  # Unit tests for BuildManager
  | |- WebhookHandlerTest.java  # Unit tests for WebhookHandler
@@ -144,3 +142,36 @@ curl -X PATCH -H "Authorization: token $GITHUB_TOKEN" \
      -d "{\"config\": {\"url\": \"$NGROK_URL/webhook\", \"content_type\": \"json\"}}" \
      https://api.github.com/repos/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME/hooks/YOUR_WEBHOOK_ID
 ```
+## Contributions
+
+### **🔹 Team Members**
+- Biming Wen @WenBiming
+- Xu Zuo @floralsea
+- Gustav Nordström @GustavNordstrom
+- Gustav Wallin @Muppsz
+
+### **🔹 Contribution Statements**
+- **Biming Wen**: 
+  - Contributed to the new feature for p+, keeping build history
+  - Define `TestResult`table of relational database MySQL, holding records for each 'mvn test'
+  - Implement Data Persistance Layer of the project, including
+    - classes TestResultEntity and TestStatus in package entity
+    - Classes TestResultDAO, HibernateUtil and HibernateTestUtil in package dao
+    - Unit tests and integral tests of TestResultDAO
+  
+- **Xu Zuo**:
+   - Set up the initial structure based on the architecture provided by Biming Wen.
+   - Implemented and contributed to CI sever, BuildManager, BuildWorker, JobQueue, StatusReporter and WebhookHandler.
+   - Implemented unit test of BuildManager.
+   - Contributed to the new feature for p+, keeping build history.
+  
+- **Gustav Nordström**:
+   - Implemented/contributed to the CI server being able to run tests
+   - Refactored parts of the code, mainly by removing unused or obsolete code 
+   - Worked on documentation and keeping it updated
+   
+- **Gustav Wallin** : 
+
+## Essence State
+
+Regarding Essence, we believe we're currently in the collaborating stage, and while progress is being made, there are still areas for improvement. Overall, collaboration is functioning well, but to reach a higher level of success, communication and effectiveness need to be further improved.

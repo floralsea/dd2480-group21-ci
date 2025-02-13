@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: ci-mysql
+    restart: always
+    ports:
+      - "3307:3306"  # Host port 3307 -> Container MySQL port 3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ci_test_db
+      MYSQL_USER: ci_user
+      MYSQL_PASSWORD: ci_pass
+    volumes:
+      - mysql_data:/var/lib/mysql  # Persist data
+    networks:
+      - ci_network
+
+volumes:
+  mysql_data:
+
+networks:
+  ci_network:
+    driver: bridge
