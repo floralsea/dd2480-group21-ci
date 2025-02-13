@@ -170,7 +170,15 @@ curl -X PATCH -H "Authorization: token $GITHUB_TOKEN" \
    - Refactored parts of the code, mainly by removing unused or obsolete code 
    - Worked on documentation and keeping it updated
    
-- **Gustav Wallin** : 
+- **Gustav Wallin** :  
+   - Contributed to compilation and testing module 
+      - feature for cloning only specific branch of the commit
+      - removing cloned folder after finishing testing
+   - implemented some unit tests
+      - for webhookhandler 
+      - and statusreporter
+   - Contributed to some of the documentation and generated the browsable html documentation
+
 
 ## Essence State
 
