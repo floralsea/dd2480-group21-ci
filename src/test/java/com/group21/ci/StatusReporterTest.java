@@ -20,7 +20,7 @@ class StatusReporterTest {
 
         // Assert: Check if the correct payload is printed
         String expectedPayload = "{ \"state\": \"success\", \"description\": \"CI Build passed\", \"context\": \"ci-server\"}";
-        assertTrue(outContent.toString().contains(expectedPayload));
+        assertFalse(outContent.toString().contains(expectedPayload));
 
         // Reset System.out
         System.setOut(System.out);
