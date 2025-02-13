@@ -142,6 +142,62 @@ curl -X PATCH -H "Authorization: token $GITHUB_TOKEN" \
      -d "{\"config\": {\"url\": \"$NGROK_URL/webhook\", \"content_type\": \"json\"}}" \
      https://api.github.com/repos/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME/hooks/YOUR_WEBHOOK_ID
 ```
+
+### For P+ feature
+#### Step 1: Start MySQL Database
+The CI Server requires a MySQL database to store build results.
+
+Option 1: Run MySQL in Docker
+```shell
+docker-compose up -d
+```
+This will start MySQL using docker-compose.yml.
+
+#### Step 2: Verify Database is Running
+Connect to MySQL and verify the database is correctly initialized:
+
+You should modify **src/main/resources/hibernate.cfg.xml** with your own password for your MySQL sever. Change **yourpassword** with your own password.
+```plaintext
+<property name="hibernate.connection.password">yourpassword</property>
+```
+Then run:
+```shell
+mysql -u root -p
+```
+Then, run:
+```sql
+SHOW DATABASES;
+USE ci_results;
+SHOW TABLES;
+```
+Ensure **test_results** table exists.
+
+#### Step 3: Build and Run the CI Server
+```shell
+mvn clean install
+mvn exec:java -Dexec.mainClass="com.group21.ci.ContinuousIntegrationServer"
+```
+Expected output:
+```plaintext
+CI Server running on port 8080...
+```
+
+#### Step 4: Access the CI Server
+View Build History Page
+  - Open a browser and go to:
+      ```plaintext
+      http://localhost:8080/api/history
+      ```
+  - If builds exist, they will be listed with commit IDs.
+
+View Individual Build Details
+
+- Click on any commit SHA from the history page.
+  - It will open a page like:
+    ```plaintext
+    http://localhost:8080/builds/{commitSha}
+    ```
+
 ## Contributions
 
 ### **🔹 Team Members**

@@ -39,81 +39,64 @@ public class BuildManager {
     @SuppressWarnings("deprecation")
     public static boolean runBuild(String repoOwner, String repoName, String branchName, String commitSha) {
         try {
-            // Construct the repository URL dynamically
             String repoUrl = "https://github.com/" + repoOwner + "/" + repoName + ".git";
-
-
             System.out.println("Cloning repository...");
 
-
-            // Clone the repository into a local "repo" directory
+            // Clone the repository
             Process clone = Runtime.getRuntime().exec("git clone --branch " + branchName + " " + repoUrl + " repo");
-            clone.waitFor(); // Wait for cloning to complete
+            clone.waitFor();
 
+            // Ensure the latest code is pulled
+            ProcessBuilder pullProcess = new ProcessBuilder("git", "pull");
+            pullProcess.directory(new File("repo"));
+            pullProcess.start().waitFor();
 
             System.out.println("Running tests in the cloned repository...");
 
-
-            // Run Maven test
-            ProcessBuilder mvnTestBuilder = new ProcessBuilder("mvn", "test");
+            ProcessBuilder mvnTestBuilder = new ProcessBuilder("mvn", "clean", "test");
             File repoDirectory = new File("repo");
             mvnTestBuilder.directory(repoDirectory);
             Process mvnTest = mvnTestBuilder.start();
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(mvnTest.getInputStream()));
-            FileWriter logWriter = new FileWriter(LOG_FILE, true); // Append to the log file
+            FileWriter logWriter = new FileWriter(LOG_FILE, true);
             String line;
-            boolean success = false;
-
+            boolean hasFailures = false;
 
             while ((line = reader.readLine()) != null) {
-                System.out.println(line); // Print test output to console
-                logWriter.write(LocalDateTime.now() + " - " + line + "\n"); // Write test output to log file
+                System.out.println(line);
+                logWriter.write(LocalDateTime.now() + " - " + line + "\n");
 
-
-                // Check if the test execution was successful
-                if (line.contains("BUILD SUCCESS")) {
-                    success = true;
+                // Check for failures in test output
+                if (line.contains("Failures:") && !line.contains("Failures: 0")) {
+                    hasFailures = true;
                 }
             }
 
+            int exitCode = mvnTest.waitFor();
+            boolean testSuccess = (exitCode == 0);
 
-            // Capture test logs
-            StringBuilder logOutput = new StringBuilder();
-            try (BufferedReader logReader = new BufferedReader(
-                    new InputStreamReader(mvnTest.getInputStream()))) {
-                String logLine;
-                while ((logLine = logReader.readLine()) != null) {
-                    logOutput.append(logLine).append("\n");
-                }
-            }
-            // mvnTest.waitFor(); // Wait for the test execution to complete
-            boolean testSuccess = (mvnTest.waitFor() == 0);
             // Store test result in database
             TestResultEntity testResult = new TestResultEntity(
                     commitSha,
-                    testSuccess ? TestStatus.SUCCESS : TestStatus.FAILED,
-                    logOutput.toString(),
+                    testSuccess && !hasFailures ? TestStatus.SUCCESS : TestStatus.FAILED,
+                    "", // Log output not needed in DB
                     LocalDateTime.now()
             );
             testResultDAO.saveTestResult(testResult);
-            logWriter.close(); // Close the log file
 
+            System.out.println("Test result stored: " + (testResult.getStatus() == TestStatus.SUCCESS ? "SUCCESS" : "FAILED"));
 
-            // Clean up: Delete the cloned repository directory
-            deleteDirectory(repoDirectory);
+            logWriter.close();
+//            deleteDirectory(repoDirectory);
 
-            // Return true if tests pass and build succeeds
-//            return success && mvnTest.waitFor() == 0;
-            return testSuccess && success;
+            return testSuccess && !hasFailures;
         } catch (Exception e) {
-
-
-            // Print error details if build execution fails
             e.printStackTrace();
             return false;
         }
     }
+
 
     /**
      * Helper method to deletes a directory its contents.
@@ -126,13 +109,15 @@ public class BuildManager {
             if (files != null) {
                 for (File file : files) {
                     if (file.isDirectory()) {
-                        deleteDirectory(file); 
+                        deleteDirectory(file);
                     } else {
                         file.delete();
                     }
                 }
             }
-            directory.delete(); 
+            directory.delete();
         }
     }
 }
+
+
