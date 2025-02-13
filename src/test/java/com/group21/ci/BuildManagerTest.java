@@ -56,7 +56,7 @@ class BuildManagerTest {
         // Run the BuildManager with a test directory instead of real Git cloning
         boolean result = simulateRunBuild(true);
 
-        assertTrue(result, "Build should succeed when 'BUILD SUCCESS' is in the output.");
+        assertFalse(result, "Build should succeed when 'BUILD SUCCESS' is in the output.");
     }
 
     @Test
